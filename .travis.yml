@@ -2,18 +2,3 @@
 
 language: R
 cache: packages
-
-install:
-- R -e 'devtools::install_deps(dep = T)'
-- R -e 'library(class)'
-
-- R -e 'Rcpp::compileAttributes()'
-- R -e 'devtools::document()'
-- R -e 'usethis::use_rcpp()'
-- R -e 'devtools::build()'
-- R -e 'devtools::install()'
-
-
-script:
-- R CMD build .
-- R CMD check *tar.gz
