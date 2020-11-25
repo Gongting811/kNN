@@ -1,0 +1,19 @@
+Package: kNN
+Type: Package
+Title: k Nearest Neighbor
+Version: 0.1.0
+Author: Ting Gong
+Maintainer: Ting Gong <gongting@umich.edu>
+Description: This function is used to perform k nearest neighbor (kNN) classification and regression.
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    Rcpp
+LinkingTo: Rcpp
+RoxygenNote: 7.1.1
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
