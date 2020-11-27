@@ -1,7 +1,7 @@
 #'@title kNN_R
 #'
 #'
-#'@description Classfication Algorithm of K Nearest Neighbor (kNN)
+#'@description Classfication Algorithm of K Nearest Neighbor (kNN) implemented by R
 #'@details Input a training dataset and its corresponding class labels, return the predicted classfications by taking majority votes of k-nearest neighbors' classes.
 #'@param train training dataset with m data samples and d dimensions. A matrix of m by d.
 #'@param test test dataset with n data samples and d dimensions. A matrix of n by d
@@ -16,7 +16,7 @@
 #'train <- rbind(iris3[1:25,,1], iris3[1:25,,2], iris3[1:25,,3])
 #'test <- rbind(iris3[26:50,,1], iris3[26:50,,2], iris3[26:50,,3])
 #'cl <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
-#'preds = kNN(train, test, cl, k = 10, prob=TRUE, use.all = T)
+#'preds = kNN_R(train, test, cl, k = 10, prob=TRUE, use.all = T)
 #'probs=attributes(preds)$prob
 #'
 #'@export

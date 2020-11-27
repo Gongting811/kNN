@@ -1,7 +1,7 @@
 #'@title kNN
 #'
 #'
-#'@description Classfication Algorithm of K Nearest Neighbor (kNN)
+#'@description Classfication Algorithm of K Nearest Neighbor (kNN) implemented by Rcpp and accelerated by multi-thread
 #'@details Input a training dataset and its corresponding class labels, return the predicted classfications by taking majority votes of k-nearest neighbors' classes.
 #'@param train training dataset with m data samples and d dimensions. A matrix of m by d.
 #'@param test test dataset with n data samples and d dimensions. A matrix of n by d
