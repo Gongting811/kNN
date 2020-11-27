@@ -54,7 +54,6 @@ kNN <- function(train, test, cl, k=1, l=0, prob=FALSE, use.all=TRUE) {
             as.integer(unclass(cls)),
             (test),
             as.integer(nc),
-            as.integer(FALSE),
             as.integer(use.all)
   )
 

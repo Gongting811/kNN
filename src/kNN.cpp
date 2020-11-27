@@ -53,8 +53,7 @@ void C_knn_search (int &k_in, int &l_in, int &ntrain, int &dim, NumericMatrix &t
         for (k = 0; k <= k_pt; k++)
           if (dist < neighbors[k].second) {
             for (k1 = k_pt; k1 > k; k1--) {
-              neighbors[k1].second = neighbors[k1 - 1].second;
-              neighbors[k1].first = neighbors[k1 - 1].first;
+              neighbors[k1] = neighbors[k1 - 1];
             }
             neighbors[k].second = dist;
             neighbors[k].first = j;

@@ -9,7 +9,3 @@ C_kNN_multi_thread <- function(k_in, l_in, ntrain, dim, train, cls, test, ncls, 
     .Call(`_kNN_C_kNN_multi_thread`, k_in, l_in, ntrain, dim, train, cls, test, ncls, use_all)
 }
 
-rcpp_hello <- function() {
-    .Call(`_kNN_rcpp_hello`)
-}
-

@@ -46,21 +46,10 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcpp_hello
-List rcpp_hello();
-RcppExport SEXP _kNN_rcpp_hello() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello());
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_kNN_C_knn_search", (DL_FUNC) &_kNN_C_knn_search, 13},
     {"_kNN_C_kNN_multi_thread", (DL_FUNC) &_kNN_C_kNN_multi_thread, 9},
-    {"_kNN_rcpp_hello", (DL_FUNC) &_kNN_rcpp_hello, 0},
     {NULL, NULL, 0}
 };
 
