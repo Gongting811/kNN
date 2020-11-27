@@ -25,7 +25,7 @@ kNN(train, test, cl, k = 1, l = 0, prob = FALSE, use.all = TRUE)
 the predicted classfication of test
 }
 \description{
-Classfication Algorithm of K Nearest Neighbor (kNN)
+Classfication Algorithm of K Nearest Neighbor (kNN) implemented by Rcpp and accelerated by multi-thread
 }
 \details{
 Input a training dataset and its corresponding class labels, return the predicted classfications by taking majority votes of k-nearest neighbors' classes.
