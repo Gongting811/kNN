@@ -2,14 +2,14 @@
 title: "Tutorial"
 output: html_vignette
 vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{kNN tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 
 ---
 
 ```{r setup, include=FALSE}
-# knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
 library(kNN)
 
 ```
@@ -28,8 +28,3 @@ cl_gt <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
 accuracy = sum(preds == cl_gt) / length(cl_gt)
 accuracy
 ```
-
-```{r}
-
-```
-
