@@ -16,7 +16,7 @@
 #'train <- rbind(iris3[1:25,,1], iris3[1:25,,2], iris3[1:25,,3])
 #'test <- rbind(iris3[26:50,,1], iris3[26:50,,2], iris3[26:50,,3])
 #'cl <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
-#'preds = kNN_R(train, test, cl, k = 10, prob=TRUE, use.all = T)
+#'preds = kNN_R(train, test, cl, k = 10, prob=TRUE, use.all = TRUE)
 #'probs=attributes(preds)$prob
 kNN_R <- function(train, test, cl, k=1, l=0, prob=FALSE, use.all=TRUE) {
   if(is.null(dim(train)))
