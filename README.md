@@ -1,6 +1,6 @@
 # kNN
 [![Build Status](https://www.travis-ci.org/Gongting811/kNN.svg?branch=master)](https://www.travis-ci.org/Gongting811/kNN)
-
+[![codecov](https://codecov.io/gh/Gongting811/kNN/branch/master/graph/badge.svg?token=hPgaD0LL52)](https://codecov.io/gh/Gongting811/kNN)
 ## usage
 
 ### Install
