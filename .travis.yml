@@ -3,3 +3,6 @@
 language: r
 after_success:
   - Rscript -e 'covr::codecov()'
+
+before_install:
+  - Rscript -e 'install.packages(c("roxygen2", "devtools", "Rcpp"))'
