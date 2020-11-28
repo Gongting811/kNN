@@ -1,4 +1,5 @@
 # kNN
+[![Build Status](https://www.travis-ci.org/Gongting811/kNN.svg?branch=master)](https://www.travis-ci.org/Gongting811/kNN)
 
 ## usage
 
