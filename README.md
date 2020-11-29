@@ -1,8 +1,13 @@
 # kNN
+<<<<<<< HEAD
 
 [![Build Status](https://www.travis-ci.org/Gongting811/kNN.svg?branch=master)](https://www.travis-ci.org/Gongting811/kNN)
 [![codecov](https://codecov.io/gh/Gongting811/kNN/branch/master/graph/badge.svg?token=hPgaD0LL52)](https://codecov.io/gh/Gongting811/kNN)
 
+=======
+[![Build Status](https://www.travis-ci.org/Gongting811/kNN.svg?branch=master)](https://www.travis-ci.org/Gongting811/kNN)
+[![codecov](https://codecov.io/gh/Gongting811/kNN/branch/master/graph/badge.svg?token=hPgaD0LL52)](https://codecov.io/gh/Gongting811/kNN)
+>>>>>>> ff88b28ae0b8882b1c4bcd06b0f66ad2bf282ef0
 ## usage
 
 ### Install
