@@ -29,19 +29,18 @@ kNN <- function(train, test, cl, k=1, l=0, prob=FALSE, use.all=TRUE) {
     dim(test) <- c(1, length(test))
   test <- as.matrix(test)
   if(any(is.na(train)) || any(is.na(test)) || any(is.na(cl)))
-    stop(gettextf("There is missing value which is not allowed!"))
+    stop("There is missing value which is not allowed!")
   size <- dim(train)
   p <- size[2]
   ntr <- size[1]
   if(length(cl) != ntr)
     stop("The number of 'train' samples and the number of 'class' should match!")
   if(ntr < k) {
-    warning(gettextf("k = %d exceeds number %d of 'train' samples!", k, ntr),
-            domain = NA)
+    warning("k exceeds number of 'train' samples!")
     k <- ntr
   }
   if (k < 1)
-    stop(gettextf("k = %d cannot be less than 1!", k), domain = NA)
+    stop("k cannot be less than 1!")
   if(ncol(test) != p)
     stop("The dimensions of 'test' and 'train' do not match!")
   cls <- as.factor(cl)
@@ -60,4 +59,5 @@ kNN <- function(train, test, cl, k=1, l=0, prob=FALSE, use.all=TRUE) {
   res <- factor(unlist(Z[1]), levels=seq_along(levels(cls)),labels=levels(cls))
   if(prob) attr(res, "prob") <- unlist(Z[2])
   return (res)
+
 }

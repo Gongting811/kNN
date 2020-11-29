@@ -26,19 +26,18 @@ kNN_R <- function(train, test, cl, k=1, l=0, prob=FALSE, use.all=TRUE) {
     dim(test) <- c(1, length(test))
   test <- as.matrix(test)
   if(any(is.na(train)) || any(is.na(test)) || any(is.na(cl)))
-    stop(gettextf("There is missing value which is not allowed!"))
+    stop("There is missing value which is not allowed!")
   size <- dim(train)
   p <- size[2]
   ntr <- size[1]
   if(length(cl) != ntr)
     stop("The number of 'train' samples and the number of 'class' should match!")
   if(ntr < k) {
-    warning(gettextf("k = %d exceeds number %d of 'train' samples!", k, ntr),
-            domain = NA)
+    warning("k exceeds number of 'train' samples!")
     k <- ntr
   }
   if (k < 1)
-    stop(gettextf("k = %d cannot be less than 1!", k), domain = NA)
+    stop("k cannot be less than 1!")
   if(ncol(test) != p)
     stop("The dimensions of 'test' and 'train' do not match!")
   cls <- as.factor(cl)
@@ -61,12 +60,10 @@ kNN_R <- function(train, test, cl, k=1, l=0, prob=FALSE, use.all=TRUE) {
 }
 R_helper <- function(k_in, l_in, ntrain, dim, train, cls, test, ncls, cv, use_all) {
 
-  EPSILON = 1e-4
-
   UNIF_RAND = runif(1) # random generator
   MAX_TIES = 1000 # maximum of allowed ties for distance comparison
   NUM_THREAD = 3 # default number of threads
-  MAX_VALUE = 0.99 * 1.79769e+308 # possiblt max value for distance computation and comparison
+  MAX_VALUE = 1.79769e+308 # possiblt max value for distance computation and comparison
 
   ntest = dim(test)[1]
   div = ceiling(ntest / NUM_THREAD)
@@ -77,18 +74,17 @@ R_helper <- function(k_in, l_in, ntrain, dim, train, cls, test, ncls, cv, use_al
   pos = rep(0, MAX_TIES)
   nclass = rep(0, MAX_TIES)
 
-
   for (n_t in 1:ntest) {
     k_pt = k_init
-    dists = rep(MAX_VALUE, MAX_TIES)
+    dists = rep(MAX_VALUE, k_pt)
 
     for (j in 1:ntrain) {
       # compute square Euclidean distance between j-th train sample and n_t-th test sample
       dist = sum((test[n_t,] - train[j,])^2)
 
       # insert the distance into dists if it's currently within k smallest
-      if (dist <= dists[k_init] * (1 + EPSILON)){
-        for (k in 1:k_pt){
+      if (dist <= dists[k_init]){
+        for (k in 1:(k_pt+1)){
           if (dist < dists[k]) {
             dists[(k+1):(k_pt+1)] = dists[k:k_pt]
             pos[(k+1):(k_pt+1)] = pos[k:k_pt]
@@ -97,8 +93,8 @@ R_helper <- function(k_in, l_in, ntrain, dim, train, cls, test, ncls, cv, use_al
             pos[k] = j;
             if (dists[k_pt+1] <= dists[k_init])
               k_pt = k_pt + 1
-            if (k_pt == MAX_TIES - 1)
-              stop("There are too many ties in k nearest neighbors!");
+            stopifnot (k_pt != MAX_TIES - 1)
+            # stop("There are too many ties in k nearest neighbors!");
             break;
           }
         }
@@ -116,7 +112,7 @@ R_helper <- function(k_in, l_in, ntrain, dim, train, cls, test, ncls, cv, use_al
 
       extras = 0;
       for (j in k_init:k_pt) {
-        if (dists[j] <= dists[k_init] * (1 + EPSILON)){
+        if (dists[j] <= dists[k_init]){
           extras = extras + 1
           votes[cls[pos[j]]] = votes[cls[pos[j]]] + 1
         }
@@ -127,7 +123,7 @@ R_helper <- function(k_in, l_in, ntrain, dim, train, cls, test, ncls, cv, use_al
     else {
       extras = 0
       for (j in 1:k_init) {
-        if (dists[j] >= dists[k_init] * (1 - EPSILON))
+        if (dists[j] >= dists[k_init])
           break
         votes[cls[pos[j]]] = votes[cls[pos[j]]] + 1
       }
@@ -136,24 +132,16 @@ R_helper <- function(k_in, l_in, ntrain, dim, train, cls, test, ncls, cv, use_al
         votes[cls[pos[j1]]] = votes[cls[pos[j1]]] + 1
       }
       else {
-        needed = k_init - j1 + 1
-        nclass[1:needed] = cls[pos[j1 + 1:needed]]
+        j1 = j - 1
+        needed = k_init - j1
+        nclass[1:needed] = cls[pos[j1 + (1:needed)]]
         ti = needed;
-        for (j in (k_init + 1):k_pt) {
-          if (dists[j] > dists[k_init] * (1 + EPSILON))
-            break;
-          ti = ti + 1
-          if (ti * UNIF_RAND < needed) {
-            j2 = j1 + as.integer(UNIF_RAND * needed)
-            nclass[j2] = cls[pos[j]]
-          }
-        }
         votes[nclass[1:needed]] = votes[nclass[1:needed]] + 1
       }
     }
 
     nties = 1;
-    index = 0;
+    index = 1;
     if (l_in > 0)
       max_vote =  (l_in - 1 + extras)
     else
@@ -175,5 +163,6 @@ R_helper <- function(k_in, l_in, ntrain, dim, train, cls, test, ncls, cv, use_al
     pr[n_t] = max_vote / (k_init + extras)
   }
   return (list(res, pr))
+
 }
 
