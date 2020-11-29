@@ -4,6 +4,8 @@ language: r
 sudo: required
 warnings_are_errors: false
 r:
+  - release
+  - devel
   - oldrel
 
 after_success:

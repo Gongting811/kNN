@@ -10,21 +10,50 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(kNN)
-
 ```
-After calling kNN, use kNN or kNN_R to get knn results.
+Include the kNN package:
+```{r}
+library(kNN)
+```
+Load intrinsic iris dataset and store them into train, test and cl (class).
 ```{r}
 train <- rbind(iris3[1:25,,1], iris3[1:25,,2], iris3[1:25,,3])
 test <- rbind(iris3[26:50,,1], iris3[26:50,,2], iris3[26:50,,3])
 cl <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
-preds = kNN(train, test, cl, k = 10, prob=TRUE, use.all = TRUE)
-probs=attributes(preds)$prob
+
+```
+
+After that, calling kNN, use kNN or kNN_R to get knn results.
+```{r}
+start = Sys.time()
+preds1 = kNN_R(train, test, cl, k = 10, prob=TRUE, use.all = FALSE)
+probs1=attributes(preds1)$prob
+end = Sys.time()
+print("The time cost of R-based implementation: ")
+t1=end-start
+print(t1)
+```
+
+```{r}
+start = Sys.time()
+preds2 = kNN(train, test, cl, k = 10, prob=TRUE, use.all = FALSE)
+probs2=attributes(preds2)$prob
+end = Sys.time()
+print("The time cost of Rcpp-based implementation: ")
+t2=end-start
+print(t2)
+```
+See the acceleration rate.
+```{r}
+cat("The acceleration rate is", as.numeric(t1)/as.numeric(t2))
+
 ```
 
 See the accuracy of the algorithm.
 ```{r}
 cl_gt <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
-accuracy = sum(preds == cl_gt) / length(cl_gt)
-accuracy
+accuracy1 = sum(preds1 == cl_gt) / length(cl_gt)
+accuracy2 = sum(preds2 == cl_gt) / length(cl_gt)
+cat("The accuracy of R-based implementation:", accuracy1, "\n")
+cat("The accuracy of Rcpp-based implementation:", accuracy2)
 ```
