@@ -33,7 +33,7 @@ cl <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
 preds = kNN_R(train, test, cl, k = 10, prob=TRUE, use.all = T)
 probs=attributes(preds)$prob
 ```
-#### Correctness
+#### Correctness and Efficiency
 ```R=T
 library(class)
 
