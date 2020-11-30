@@ -11,11 +11,15 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 Include the kNN package:
+
 ```{r}
 library(kNN)
 ```
+
 Load intrinsic iris dataset and store them into train, test and cl (class).
+
 ```{r}
 train <- rbind(iris3[1:25,,1], iris3[1:25,,2], iris3[1:25,,3])
 test <- rbind(iris3[26:50,,1], iris3[26:50,,2], iris3[26:50,,3])
@@ -24,9 +28,10 @@ cl <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
 ```
 
 After that, calling kNN, use kNN or kNN_R to get knn results.
+
 ```{r}
 start = Sys.time()
-preds1 = kNN_R(train, test, cl, k = 10, prob=TRUE, use.all = FALSE)
+preds1 = kNN_R(train, test, cl, k = 15, prob=TRUE, use.all = FALSE)
 probs1=attributes(preds1)$prob
 end = Sys.time()
 print("The time cost of R-based implementation: ")
@@ -36,7 +41,7 @@ print(t1)
 
 ```{r}
 start = Sys.time()
-preds2 = kNN(train, test, cl, k = 10, prob=TRUE, use.all = FALSE)
+preds2 = kNN(train, test, cl, k = 15, prob=TRUE, use.all = FALSE)
 probs2=attributes(preds2)$prob
 end = Sys.time()
 print("The time cost of Rcpp-based implementation: ")
@@ -44,12 +49,14 @@ t2=end-start
 print(t2)
 ```
 See the acceleration rate.
+
 ```{r}
 cat("The acceleration rate is", as.numeric(t1)/as.numeric(t2))
 
 ```
 
 See the accuracy of the algorithm.
+
 ```{r}
 cl_gt <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
 accuracy1 = sum(preds1 == cl_gt) / length(cl_gt)
@@ -57,3 +64,104 @@ accuracy2 = sum(preds2 == cl_gt) / length(cl_gt)
 cat("The accuracy of R-based implementation:", accuracy1, "\n")
 cat("The accuracy of Rcpp-based implementation:", accuracy2)
 ```
+
+# Correctness and Effciency
+
+## Example of iris
+
+```{r}
+# install.packages("class")
+library(class)
+start = Sys.time()
+preds3=knn(train, test, cl, k = 15, prob=TRUE, use.all = FALSE)
+probs3=attributes(preds3)$prob
+end = Sys.time()
+t3=end-start
+print(t3)
+
+```
+### Efficiency
+
+```{r}
+cat("The acceleration rate of kNN comparing to knn in `class` package is", as.numeric(t3)/as.numeric(t2))
+```
+
+We can see our implementation accelerated by multi-thread is faster than the original knn function.
+
+### Correctness
+```{r}
+sum(preds3 != preds2)
+sum(preds3 != preds1)
+sum(preds1 != preds2)
+sum(attributes(preds3)$prob != attributes(preds2)$prob)
+sum(attributes(preds3)$prob != attributes(preds1)$prob)
+sum(attributes(preds1)$prob != attributes(preds2)$prob)
+
+```
+
+We can see all prediction labels and their corresponding probabilities are the same for each implementations.
+
+The dataset is small and the acceleration is not remarkable. So we simulate another larger dataset.
+
+## Example of simulated data
+
+Create simulated data by random uniform distribution, which is a training set consisting of 2-class and 4000 samples and a test data consisting 400 samples.
+
+```{r}
+d = 2
+m = d*2000
+train <- matrix(runif(m*40, -1000, 1000), m, 40)
+cl <- factor(c(rep(1,m/d), rep(2,m/d)))
+test <- matrix(runif(m/10*40, -1000, 1000), m/10, 40)
+
+```
+
+Run the three implemented functions on the data
+
+```{r}
+
+start = Sys.time()
+r1=knn(train, test, cl, k = 11, prob=TRUE, use.all = F)
+end = Sys.time()
+t11 = end-start
+print(t11)
+
+start = Sys.time()
+r2=kNN_R(train, test, cl, k = 11, prob=TRUE, use.all = F)
+end = Sys.time()
+t22=end-start
+print(t22)
+
+start = Sys.time()
+r3=kNN(train, test, cl, k = 11, prob=TRUE, use.all = F)
+end = Sys.time()
+t33=end-start
+print(t33)
+
+```
+
+### Correctness
+
+```{r}
+sum(r1 != r2)
+sum(r1 != r3)
+sum(r3 != r2)
+sum(attributes(r3)$prob != attributes(r1)$prob)
+sum(attributes(r3)$prob != attributes(r2)$prob)
+sum(attributes(r1)$prob != attributes(r2)$prob)
+
+```
+
+We can see in this simulated data, all predictions and probabilities are still the same.
+
+### Efficiency
+```{r}
+cat("The acceleration rate of kNN comparing to knn in `class` package is", as.numeric(t11)/as.numeric(t33))
+
+cat("The acceleration rate of kNN comparing to kNN_R is", as.numeric(t22)/as.numeric(t33))
+
+```
+
+We can see our implementation accelerated by multi-thread is about 2x to 3x faster than the original knn function. And we can see our implementation accelerated by multi-thread is about 100x to 300x faster than the R-based kNN_R function.
+
+
